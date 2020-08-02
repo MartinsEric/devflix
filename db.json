@@ -1,0 +1,10 @@
+{
+  "categorias": [
+    {
+      "id": 1,
+      "name": "Front-end",
+      "description": "Vídeos relacionados a front-end",
+      "color": "#cbd1ff"
+    }
+  ]
+}
