@@ -15,7 +15,9 @@ function CadastroCategoria() {
   const [values, setValues] = useState(initialValue);
 
   useEffect(() => {
-    const url = 'http://localhost:8080/categorias';
+    const url = window.location.hostname.includes('localhost')
+      ? 'http://localhost:8080/categorias'
+      : 'https://devflixapi.herokuapp.com/categorias';
     fetch(url)
       .then(async (response) => {
         const responseConvertido = await response.json();
