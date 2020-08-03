@@ -3,26 +3,25 @@ import { Link } from 'react-router-dom';
 import PageDefault from '../../../Components/PageDefault';
 import FormField from '../../../Components/FormField';
 import Button from '../../../Components/Button';
+import useForm from '../../../hooks/useForm';
+import categoriasRepository from '../../../repositories/categorias';
 
 function CadastroCategoria() {
-  const initialValue = {
-    name: '',
-    description: '',
-    color: '#000',
+  const valoresIniciais = {
+    titulo: '',
+    descricao: '',
+    cor: '#000',
   };
 
+  const { handleChange, clearForm, values } = useForm(valoresIniciais);
+
   const [categorias, setCategorias] = useState([]);
-  const [values, setValues] = useState(initialValue);
 
   useEffect(() => {
-    const url = window.location.hostname.includes('localhost')
-      ? 'http://localhost:8080/categorias'
-      : 'https://devflixapi.herokuapp.com/categorias';
-    fetch(url)
+    categoriasRepository.getAll()
       .then(async (response) => {
-        const responseConvertido = await response.json();
         setCategorias([
-          ...responseConvertido,
+          ...response,
         ]);
       });
   }, []);
@@ -34,23 +33,7 @@ function CadastroCategoria() {
       values,
     ]);
 
-    setValues(initialValue);
-  }
-
-  function setValue(key, value) {
-    setValues({
-      ...values,
-      [key]: value,
-    });
-  }
-
-  function handleChange(inputInfo) {
-    // const { getAttribute, value } = inputInfo.target;
-
-    setValue(
-      inputInfo.target.getAttribute('name'),
-      inputInfo.target.value,
-    );
+    clearForm();
   }
 
   return (
@@ -61,24 +44,24 @@ function CadastroCategoria() {
 
         <FormField
           label="Nome da Categoria"
-          value={values.name}
-          name="name"
+          value={values.titulo}
+          name="titulo"
           onChange={handleChange}
         />
 
         <FormField
           label="Descrição"
           type="textarea"
-          value={values.description}
-          name="description"
+          value={values.descricao}
+          name="descricao"
           onChange={handleChange}
         />
 
         <FormField
           label="Cor"
           type="color"
-          value={values.color}
-          name="color"
+          value={values.cor}
+          name="cor"
           onChange={handleChange}
         />
 
@@ -92,9 +75,9 @@ function CadastroCategoria() {
       )}
 
       <ul>
-        {categorias.map((categoria, indice) => (
-          <li key={indice}>
-            { categoria.name }
+        {categorias.map((categoria) => (
+          <li key={categoria.id}>
+            { categoria.titulo }
           </li>
         ))}
       </ul>
